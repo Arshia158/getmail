@@ -3,301 +3,704 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Get Mail</title>
-    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>Get Mail - ساخت ایمیل فیک</title>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root{
-            --bg:#0f1724;
-            --card:#0b1220cc;
-            --accent1:#ff6b6b;
-            --accent2:#7c5cff;
-            --glass: rgba(255,255,255,0.04);
-        }
-        *{box-sizing:border-box;margin:0;padding:0}
-        html,body{height:100%}
-        body{
-            font-family:"Vazirmatn", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-            background: radial-gradient(1200px 600px at 10% 10%, rgba(124,92,255,0.12), transparent 10%),
-                        radial-gradient(1000px 500px at 90% 90%, rgba(255,107,107,0.08), transparent 10%),
-                        var(--bg);
-            color:#e6eef8;
-            -webkit-font-smoothing:antialiased;
-            display:flex;
-            align-items:center;
-            justify-content:center;
-            padding:20px;
-            min-height:100vh;
+        :root {
+            --bg: #0a0e1a;
+            --card: #0f172a;
+            --accent1: #ff4757;
+            --accent2: #5f27cd;
+            --text: #e6eef8;
+            --text-secondary: #a5b4fc;
+            --glass: rgba(255, 255, 255, 0.05);
+            --border: rgba(255, 255, 255, 0.08);
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            --gradient: linear-gradient(135deg, var(--accent1), var(--accent2));
         }
 
-        .wrap{
-            width:min(920px, 96%);
-            background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-            border-radius:18px;
-            padding:24px;
-            box-shadow: 0 8px 30px rgba(2,6,23,0.7);
-            backdrop-filter: blur(6px);
-            border: 1px solid rgba(255,255,255,0.03);
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        .title{
-            font-size: clamp(24px, 4.6vw, 44px);
-            font-weight:900;
-            margin-bottom:12px;
-            letter-spacing: -0.02em;
-            display:flex;
-            align-items:center;
-            gap:10px;
-        }
-        .title .dot{
-            width:14px; height:14px; border-radius:50%;
-            background: linear-gradient(135deg,var(--accent1),var(--accent2));
-            box-shadow: 0 4px 18px rgba(124,92,255,0.25);
+        html {
+            scroll-behavior: smooth;
         }
 
-        .subtitle{
-            margin-bottom:20px;
-            color:#bcd3ff;
-            opacity:0.9;
-            font-size:14px;
+        body {
+            font-family: "Vazirmatn", sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+            min-height: 100vh;
         }
 
-        .channels{
-            display:flex;
-            gap:18px;
-            flex-wrap:wrap;
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
         }
 
-        .card{
-            flex:1 1 260px;
-            min-width:220px;
-            background: linear-gradient(180deg,var(--card), var(--glass));
-            padding:20px;
-            border-radius:14px;
-            text-decoration:none;
-            color:inherit;
-            transition: transform .20s ease, box-shadow .20s ease;
-            border: 1px solid rgba(255,255,255,0.03);
-        }
-        .card:hover{
-            transform: translateY(-6px);
-            box-shadow: 0 18px 40px rgba(2,6,23,0.6);
-        }
-        .card h3{
-            margin:0 0 8px 0;
-            font-size:18px;
-            display:flex; align-items:center; gap:10px;
-        }
-        .tag{
-            font-weight:700;
-            font-size:13px;
-            padding:6px 10px;
-            border-radius:999px;
-            background: linear-gradient(90deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01));
-            color:#fff;
-        }
-        .desc{
-            margin:8px 0 14px 0;
-            color:#c9d9ff;
-            opacity:0.9;
-            font-size:14px;
+        header {
+            padding: 20px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            background: rgba(10, 14, 26, 0.85);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            transition: all 0.3s ease;
         }
 
-        .visit{
-            display:inline-block;
-            padding:10px 14px;
-            border-radius:10px;
-            font-weight:700;
-            text-decoration:none;
-            background:linear-gradient(90deg,var(--accent1),var(--accent2));
-            color:#061029;
-            box-shadow: 0 8px 24px rgba(124,92,255,0.18);
-        }
-
-        footer{
-            margin-top:22px;
-            color:#9fb3e6;
-            font-size:13px;
-            text-align:center;
-            opacity:0.9;
-        }
-
-        @media (max-width:520px){
-            body{
-                align-items:flex-start;
-                padding-top:40px;
-            }
-            .channels{flex-direction:column}
-        }
-        
-        .hero-section {
-            margin-bottom: 30px;
-            text-align: center;
-        }
-        
-        .hero-section .subtitle {
-            max-width: 700px;
-            margin: 0 auto 20px;
-        }
-        
-        .download-buttons {
+        .header-container {
             display: flex;
-            justify-content: center;
-            margin: 25px 0;
+            justify-content: space-between;
+            align-items: center;
         }
-        
-        .features-section {
-            margin: 40px 0;
-        }
-        
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 18px;
-            margin-top: 20px;
-        }
-        
-        .feature-card {
-            background: linear-gradient(180deg,var(--card), var(--glass));
-            padding:20px;
-            border-radius:14px;
-            border: 1px solid rgba(255,255,255,0.03);
-            transition: transform .20s ease, box-shadow .20s ease;
-        }
-        
-        .feature-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 18px 40px rgba(2,6,23,0.6);
-        }
-        
-        .feature-card i {
+
+        .logo {
+            display: flex;
+            align-items: center;
             font-size: 24px;
-            margin-bottom: 10px;
-            background: linear-gradient(135deg,var(--accent1),var(--accent2));
+            font-weight: 900;
+            color: var(--text);
+            text-decoration: none;
+        }
+
+        .logo-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--gradient);
+            margin-left: 10px;
+            box-shadow: 0 0 10px rgba(95, 39, 205, 0.5);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        nav ul li {
+            margin-right: 30px;
+        }
+
+        nav ul li a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        nav ul li a:hover {
+            color: var(--text);
+        }
+
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            right: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gradient);
+            transition: width 0.3s ease;
+        }
+
+        nav ul li a:hover::after {
+            width: 100%;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text);
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .hero {
+            padding: 140px 0 80px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -150px;
+            left: -150px;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(95, 39, 205, 0.15), transparent 70%);
+            z-index: -1;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: -100px;
+            right: -100px;
+            width: 400px;
+            height: 400px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 71, 87, 0.1), transparent 70%);
+            z-index: -1;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 8vw, 4rem);
+            font-weight: 900;
+            margin-bottom: 20px;
+            line-height: 1.2;
+            background: linear-gradient(to right, var(--text), var(--text-secondary));
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
         }
-        
-        .feature-card h3 {
-            margin-bottom: 8px;
-            font-size: 18px;
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
         }
-        
-        .feature-card p {
-            color:#c9d9ff;
-            opacity:0.9;
-            font-size:14px;
+
+        .hero-image {
+            margin: 40px auto;
+            max-width: 100%;
+            height: auto;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            transition: transform 0.5s ease;
         }
-        
-        .download-btn {
+
+        .hero-image:hover {
+            transform: translateY(-10px);
+        }
+
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+
+        .btn {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            padding: 15px 40px;
-            font-size: 18px;
+            padding: 15px 30px;
+            border-radius: 50px;
             font-weight: 700;
             text-decoration: none;
-            border-radius: 12px;
-            background: linear-gradient(90deg, var(--accent1), var(--accent2));
-            color: #061029;
-            box-shadow: 0 8px 24px rgba(124,92,255,0.18);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .btn-primary {
+            background: var(--gradient);
+            color: white;
+            box-shadow: 0 5px 15px rgba(95, 39, 205, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(95, 39, 205, 0.6);
+        }
+
+        .btn i {
+            margin-left: 10px;
+        }
+
+        .features {
+            padding: 80px 0;
+            background: rgba(15, 23, 42, 0.5);
+            border-radius: 30px;
+            margin: 40px 20px;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-title h2 {
+            font-size: clamp(2rem, 6vw, 3rem);
+            font-weight: 900;
+            margin-bottom: 15px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            right: 25%;
+            width: 50%;
+            height: 4px;
+            background: var(--gradient);
+            border-radius: 2px;
+        }
+
+        .section-title p {
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .feature-card {
+            background: var(--card);
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow);
+            border-color: rgba(95, 39, 205, 0.3);
+        }
+
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 20px;
+            background: var(--glass);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 25px;
+            font-size: 28px;
+            color: var(--accent2);
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .feature-card p {
+            color: var(--text-secondary);
+            flex-grow: 1;
+        }
+
+        .screenshots {
+            padding: 80px 0;
+        }
+
+        .screenshots-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .screenshot {
+            width: 280px;
+            height: 560px;
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            position: relative;
+            transition: all 0.5s ease;
+        }
+
+        .screenshot:hover {
+            transform: scale(1.03);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .screenshot img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .screenshot-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(10, 14, 26, 0.9), transparent);
+            color: white;
+            padding: 30px 20px 20px;
+            font-weight: 700;
+            opacity: 0;
+            transform: translateY(20px);
             transition: all 0.3s ease;
         }
-        
-        .download-btn:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 30px rgba(124,92,255,0.25);
+
+        .screenshot:hover .screenshot-caption {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .cta {
+            padding: 100px 0;
+            background: linear-gradient(135deg, rgba(95, 39, 205, 0.1), rgba(255, 71, 87, 0.1));
+            border-radius: 30px;
+            margin: 40px 20px;
+            text-align: center;
+        }
+
+        .cta h2 {
+            font-size: clamp(2rem, 6vw, 3rem);
+            font-weight: 900;
+            margin-bottom: 20px;
+        }
+
+        .cta p {
+            max-width: 600px;
+            margin: 0 auto 40px;
+            color: var(--text-secondary);
+        }
+
+        footer {
+            padding: 50px 0 30px;
+            text-align: center;
+            border-top: 1px solid var(--border);
+        }
+
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            font-size: 24px;
+            font-weight: 900;
+            margin-bottom: 30px;
+        }
+
+        .copyright {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 992px) {
+            .features-grid {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            }
+            
+            .screenshot {
+                width: 240px;
+                height: 480px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            nav ul {
+                display: none;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            .btn-group {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 100%;
+                max-width: 300px;
+            }
+            
+            .screenshot {
+                width: 200px;
+                height: 400px;
+            }
+            
+            .screenshots-container {
+                gap: 20px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .hero {
+                padding: 120px 0 60px;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .section-title h2 {
+                font-size: 1.8rem;
+            }
+            
+            .features, .cta {
+                margin: 20px 10px;
+                padding: 50px 0;
+            }
+            
+            .screenshot {
+                width: 160px;
+                height: 320px;
+            }
+            
+            .feature-card {
+                padding: 20px;
+            }
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
         }
         
-        .download-btn i {
-            margin-left: 10px;
-            font-size: 24px;
+        .fade-in.active {
+            opacity: 1;
+            transform: translateY(0);
         }
     </style>
 </head>
 <body>
-    <div class="wrap">
-        <section class="hero-section">
-            <h1 class="title">
-                <span class="dot"></span>
+    <header>
+        <div class="container header-container">
+            <a href="#" class="logo">
+                <span class="logo-dot"></span>
                 Get Mail
-            </h1>
-            <p class="subtitle">ساخت ایمیل فیک با طراحی مدرن و سرعت بالا </p>
-            
-            <div class="download-buttons">
-                <a href="https://getmail.arshia2.ir/app.apk" class="download-btn">
-                    <i class="fas fa-download"></i>
-                    دانلود مستقیم
-                </a>
-            </div>
-        </section>
+            </a>
+            <nav>
+                <ul>
+                    <li><a href="#features">ویژگی‌ها</a></li>
+                    <li><a href="#screenshots">تصاویر</a></li>
+                </ul>
+            </nav>
+            <button class="mobile-menu-btn">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </header>
 
-        <section class="features-section">
-            <h2 class="title">
-                <span class="dot"></span>
-                ویژگی‌های برنامه
-            </h2>
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content fade-in">
+                <h1>ساخت ایمیل فیک با سرعت بالا</h1>
+                <p>با Get Mail به سادگی و با سرعت بالا ایمیل‌های موقت برای ثبت‌نام و استفاده‌های مختلف بسازید</p>
+                
+              <!--  <img src="https://getmail.arshia2.ir/icon.png" alt="Get Mail App" class="hero-image">  -->
+                
+                <div class="btn-group">
+                    <a href="https://getmail.arshia2.ir/app.apk" class="btn btn-primary">
+                        <i class="fas fa-download"></i>
+                        دانلود مستقیم
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="features" id="features">
+        <div class="container">
+            <div class="section-title fade-in">
+                <h2>ویژگی‌های برنامه</h2>
+                <p>Get Mail با ویژگی‌های منحصر به فرد خود، تجربه‌ای بی‌نظیر در ساخت ایمیل‌های موقت برای شما فراهم می‌کند</p>
+            </div>
             
             <div class="features-grid">
-                <div class="feature-card">
-                    <i class="fas fa-bolt"></i>
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
                     <h3>سرعت بالا</h3>
-                    <p>ایمیل های شما با سرعت بالا ساخته میشوند.</p>
+                    <p>ایمیل‌های شما با سرعت بالا و بدون تأخیر ساخته می‌شوند</p>
                 </div>
-                <div class="feature-card">
-                    <i class="fas fa-shield-alt"></i>
+                
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
                     <h3>امنیت قوی</h3>
-                    <p>حفاظت از ایمیل ها و پیام های شما.</p>
+                    <p>حفاظت کامل از ایمیل‌ها و پیام‌های شما با امنیت بالا</p>
                 </div>
-                <div class="feature-card">
-                    <i class="fas fa-palette"></i>
+                
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">
+                        <i class="fas fa-palette"></i>
+                    </div>
                     <h3>طراحی زیبا</h3>
-                    <p>رابط کاربری مدرن و جذاب که استفاده از اپلیکیشن را لذت‌بخش می‌کند.</p>
+                    <p>رابط کاربری مدرن و جذاب که استفاده از اپلیکیشن را لذت‌بخش می‌کند</p>
+                </div>
+                
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">
+                        <i class="fas fa-sync-alt"></i>
+                    </div>
+                    <h3>همگام‌سازی</h3>
+                    <p>همگام‌سازی ایمیل‌ها در تمام دستگاه‌های شما به صورت خودکار</p>
+                </div>
+                
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">
+                        <i class="fas fa-bell"></i>
+                    </div>
+                    <h3>اعلان‌ها</h3>
+                    <p>دریافت فوری اعلان‌ها برای ایمیل‌های جدید و مهم</p>
+                </div>
+                
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">
+                        <i class="fas fa-filter"></i>
+                    </div>
+                    <h3>فیلتر پیشرفته</h3>
+                    <p>دسته‌بندی و فیلتر کردن ایمیل‌ها به صورت هوشمند و کارآمد</p>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <footer>
-            <p>&copy; 2023 Get Mail. تمامی حقوق محفوظ است.</p>
-        </footer>
-    </div>
+    <section class="screenshots" id="screenshots">
+        <div class="container">
+            <div class="section-title fade-in">
+                <h2>تصاویر برنامه</h2>
+                <p>نگاهی به رابط کاربری زیبا و کاربردی Get Mail</p>
+            </div>
+            
+            <div class="screenshots-container">
+                <div class="screenshot fade-in">
+                    <img src="https://getmail.arshia2.ir/sc1.jpg" alt="App Screenshot 1">
+                    <div class="screenshot-caption">داشبورد اصلی</div>
+                </div>
+                
+                <div class="screenshot fade-in">
+                    <img src="https://getmail.arshia2.ir/sc2.jpg" alt="App Screenshot 2">
+                    <div class="screenshot-caption">ایمیل‌های جدید</div>
+                </div>
+                
+        </div>
+    </section>
+
+    <section class="cta">
+        <div class="container">
+            <div class="fade-in">
+                <h2>آماده‌اید شروع کنید؟</h2>
+                <p>Get Mail را همین حالا دانلود کنید و از ساخت ایمیل‌های فیک با سرعت بالا لذت ببرید</p>
+                <a href="https://getmail.arshia2.ir/app.apk" class="btn btn-primary">
+                    <i class="fas fa-download"></i>
+                    دانلود رایگان برنامه
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <span class="logo-dot"></span>
+                    Get Mail
+                </div>
+                
+                <p class="copyright">&copy; 2025 Get Mail. تمامی حقوق محفوظ است.</p>
+            </div>
+        </div>
+    </footer>
 
     <script>
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        const nav = document.querySelector('nav ul');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            nav.style.display = nav.style.display === 'flex' ? 'none' : 'flex';
+        });
+
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
                 
                 const target = document.querySelector(this.getAttribute('href'));
                 if (target) {
-                    target.scrollIntoView({
+                    window.scrollTo({
+                        top: target.offsetTop - 80,
                         behavior: 'smooth'
                     });
+                    
+                    if (nav.style.display === 'flex') {
+                        nav.style.display = 'none';
+                    }
                 }
             });
         });
 
-        const observerOptions = {
-            root: null,
-            rootMargin: '0px',
-            threshold: 0.1
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 100) {
+                header.style.padding = '10px 0';
+                header.style.background = 'rgba(10, 14, 26, 0.95)';
+            } else {
+                header.style.padding = '20px 0';
+                header.style.background = 'rgba(10, 14, 26, 0.85)';
+            }
+        });
+
+        const fadeElements = document.querySelectorAll('.fade-in');
+        
+        const fadeInOnScroll = () => {
+            fadeElements.forEach(element => {
+                const elementTop = element.getBoundingClientRect().top;
+                const elementVisible = 150;
+                
+                if (elementTop < window.innerHeight - elementVisible) {
+                    element.classList.add('active');
+                }
+            });
         };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = 1;
-                    entry.target.style.transform = 'translateY(0)';
-                }
-            });
-        }, observerOptions);
-
-        document.querySelectorAll('.feature-card').forEach(card => {
-            card.style.opacity = 0;
-            card.style.transform = 'translateY(20px)';
-            card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-            observer.observe(card);
-        });
+        
+        window.addEventListener('scroll', fadeInOnScroll);
+        fadeInOnScroll();
     </script>
 </body>
 </html>
